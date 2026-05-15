@@ -1,8 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { CITY_ROUTES } from '../src/shared/cityRoutes'
 import styles from '../styles/Home.module.css'
-
-const cities = ['Seoul', 'Tokyo', 'Paris', 'London']
 
 export default function Home() {
   return (
@@ -29,9 +28,9 @@ export default function Home() {
         </section>
 
         <nav className={styles.cityNav} aria-label="City weather pages">
-          {cities.map((city) => (
-            <Link key={city} href={`/${city}`}>
-              <a className={styles.cityLink}>{city}</a>
+          {CITY_ROUTES.map((city) => (
+            <Link key={city.code} href={`/${city.path}`}>
+              <a className={styles.cityLink}>{city.name}</a>
             </Link>
           ))}
         </nav>

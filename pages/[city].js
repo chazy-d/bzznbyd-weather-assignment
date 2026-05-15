@@ -1,8 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { CITY_ROUTES, getCityByPath } from '../src/shared/cityRoutes'
 import styles from '../styles/Home.module.css'
-
-const supportedCities = ['Seoul', 'Tokyo', 'Paris', 'London']
 
 export default function CityWeatherPage({ city }) {
   return (
@@ -38,15 +37,17 @@ export default function CityWeatherPage({ city }) {
 
 export function getStaticPaths() {
   return {
-    paths: supportedCities.map((city) => ({ params: { city } })),
+    paths: CITY_ROUTES.map((city) => ({ params: { city: city.path } })),
     fallback: false,
   }
 }
 
 export function getStaticProps({ params }) {
+  const city = getCityByPath(params.city)
+
   return {
     props: {
-      city: params.city,
+      city: city.name,
     },
   }
 }
