@@ -1,3 +1,5 @@
+import { getMockWeatherReport } from '../weather/mockWeather'
+
 const appVersion = '0.1.0'
 
 export const resolvers = {
@@ -8,5 +10,6 @@ export const resolvers = {
       version: appVersion,
     }),
     version: () => appVersion,
+    weather: (_, { city }) => getMockWeatherReport(city),
   },
 }
