@@ -1,0 +1,112 @@
+.page {
+  min-height: 100vh;
+  background: #f4f7fb;
+  color: #1f2937;
+}
+
+.shell {
+  width: 100%;
+  max-width: 1120px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 72px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #2563eb;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: #111827;
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.description {
+  max-width: 680px;
+  margin: 0;
+  color: #4b5563;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.cityNav {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.cityLink,
+.backLink {
+  border: 1px solid #d6deeb;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1f2937;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 10px 24px rgba(31, 41, 55, 0.08);
+  transition: border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.cityLink {
+  padding: 24px 16px;
+}
+
+.backLink {
+  width: fit-content;
+  padding: 12px 16px;
+}
+
+.cityLink:hover,
+.cityLink:focus,
+.backLink:hover,
+.backLink:focus {
+  border-color: #2563eb;
+  color: #2563eb;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 1279px) {
+  .shell {
+    max-width: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .cityNav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 799px) {
+  .page {
+    min-width: 800px;
+    overflow-x: auto;
+  }
+
+  .shell {
+    width: 800px;
+  }
+
+  .cityNav {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
