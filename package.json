@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=18 <21"
+    "node": ">=20 <21"
   },
   "scripts": {
     "dev": "next dev",
@@ -12,6 +12,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/server": "^5.5.1",
+    "@as-integrations/next": "^4.1.0",
+    "graphql": "^16.14.0",
     "next": "12.3.7",
     "react": "18.2.0",
     "react-dom": "18.2.0"
