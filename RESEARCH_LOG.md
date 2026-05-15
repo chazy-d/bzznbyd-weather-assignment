@@ -1,54 +1,65 @@
 # Research Log
 
-이 문서는 과제 요구사항 중 익숙하지 않거나 추가 학습이 필요한 기술을 명시하고, 구현 과정에서 어떤 기준으로 학습/적용했는지 기록하기 위한 자료입니다.
+이 문서는 구현과제 요구사항 중 처음 적용하거나 추가 확인이 필요했던 기술을 정리한 자료입니다.
 
-## 학습 필요 기술과 포인트
+제출용 README에는 실행 방법과 사용법을 중심으로 적고, 이 문서에는 기술 조사와 설계 판단을 남깁니다.
 
-| 기술 | 현재 기준 | 공부해야 할 부분 | 구현에서 확인할 포인트 |
-| --- | --- | --- | --- |
-| Next.js 12 Pages Router | 기본 라우팅은 가능하지만 과제는 v12 고정이 필요함 | `pages` 기반 라우팅, 동적 라우팅, API Routes, build/lint 흐름 | `/`, `/[city]`, `/api/graphql` 경계를 명확히 분리 |
-| GraphQL | REST와 달리 schema/query 중심 흐름을 더 확인해야 함 | typeDefs, resolver, Query root, error extensions | OpenWeather raw response를 그대로 노출하지 않고 `WeatherReport`로 정규화 |
-| Apollo Client | React query 호출 방식과 cache policy를 확인해야 함 | `ApolloProvider`, `useQuery`, loading/error/data 상태 | 페이지는 `/api/graphql`만 호출하고 OpenWeather를 직접 호출하지 않음 |
-| Apollo Server on Next.js | Next API Route에 GraphQL server를 붙이는 방식 확인 필요 | Next.js 12 API Route와 Apollo Server handler 연결 | `/api/graphql` 단일 backend endpoint 구성 |
-| OpenWeather API | Current/Forecast 응답 필드와 제한 정책 확인 필요 | Current Weather, 5 day / 3 hour Forecast, `units`, `lang`, API key | current + forecast 병렬 호출, 3시간 데이터를 5일 카드로 변환 |
-| CSS Module | 기본 사용은 가능하지만 과제 반응형 조건이 명확함 | module scope, breakpoint, horizontal scroll 처리 | 1280px 이상 중앙 정렬, 800~1279px width 100%, 800px 미만 고정 폭 |
-| Code Splitting | Next.js route splitting 외 명시 포인트 확인 필요 | route-based splitting, `next/dynamic` | forecast 영역을 동적 import 후보로 분리 |
-| Jest | 선택 구현이지만 핵심 mapper 테스트에 유용함 | pure function test, fixture 기반 테스트 | forecast grouping/representative condition 로직 검증 |
+## 학습 및 확인 대상
 
-## Commit 1. Project Bootstrap
+| 기술 | 확인한 내용 | 구현에서 적용할 기준 |
+| --- | --- | --- |
+| Next.js 12 Pages Router | `pages` 기반 라우팅, 동적 라우팅, API Routes | `/`, `/[city]`, `/api/graphql` 역할을 분리 |
+| GraphQL | `typeDefs`, `resolvers`, Query root | OpenWeather raw response를 UI에 직접 노출하지 않고 schema로 정규화 |
+| Apollo Server on Next.js | Next.js API Route에 Apollo Server handler 연결 | `/api/graphql` 단일 backend endpoint 구성 |
+| Apollo Client | `ApolloProvider`, `useQuery`, loading/error/data 상태 | 페이지는 OpenWeather를 직접 호출하지 않고 GraphQL endpoint만 호출 |
+| OpenWeather API | Current Weather, 5 day / 3 hour Forecast | current + forecast를 서버에서 호출하고 5일 예보 카드로 가공 |
+| CSS Module | component 단위 style scope | 과제 반응형 조건을 CSS Module로 구현 |
+| Code Splitting | Next.js route-based splitting, `next/dynamic` | forecast 영역을 동적 import 후보로 분리 |
+| Jest | 순수 함수 단위 테스트 | forecast grouping/representative condition 로직 검증 |
 
-### 확인한 내용
+## 설계 판단
 
-- `create-next-app@12.3.7`로 프로젝트 골격을 생성했다.
-- 생성 직후 최신 Next 의존성이 들어가는 것을 확인했고, 과제 요구사항에 맞춰 `next@12.3.7`로 명시 고정했다.
-- 기본 라우팅은 Next.js Pages Router를 사용한다.
-- OpenWeather API key는 `.env.local`에 두고, repository에는 `.env.example`만 포함한다.
-- 현재 시스템 Node.js v26에서는 Next.js 12 production build가 실패했다.
-- Node.js 18.20.8과 20.20.2에서는 production build가 통과했다.
-- 따라서 `.nvmrc`와 `engines.node`로 Node.js 18 이상 20 이하를 명시했다.
+### 1. Next.js 12와 Node.js 20
 
-### 검증 중 발견한 호환성 이슈
+과제 요구사항은 Next.js 12 사용입니다. 현재 로컬 기본 Node.js v26에서는 Next.js 12 production build가 실패하는 것을 확인했습니다. Node.js 18/20에서는 build가 통과했고, Apollo Server 5는 Node.js 20 이상을 요구하므로 실행 기준을 Node.js 20으로 정했습니다.
 
-```text
-현상: Node.js v26에서 next build 실행 시 next/dist/compiled/jsonwebtoken 내부 오류 발생
-판단: Next.js 12와 최신 Node.js 런타임의 호환성 문제
-대응: 과제 실행 기준 Node.js를 18~20으로 고정하고 README에 명시
-```
+반영 사항:
 
-### npm audit 결과
+- `.nvmrc`에 `20` 명시
+- `package.json`의 `engines.node`를 `>=20 <21`로 설정
 
-```text
-현상: next@12.3.7과 transitive dependency인 postcss에서 audit warning 발생
-판단: npm audit fix --force를 실행하면 next@16으로 올라가 과제의 Next.js 12 요구사항을 위반함
-대응: 과제에서는 Next.js 12를 유지하고, 실제 운영 서비스라면 프레임워크 업그레이드 또는 보안 패치 버전 검토가 필요하다고 기록
-```
+### 2. Apollo Server 5 선택
 
-### 이번 커밋에서 의도적으로 하지 않은 것
+Next.js 12와 함께 사용할 수 있는 Apollo Server 통합 방식을 확인했습니다. Apollo Server 4 조합도 가능하지만 2026년 기준 EOL 경고가 발생하므로, Next.js 12를 지원하는 `@as-integrations/next@4.1.0`과 `@apollo/server@5.5.1` 조합을 선택했습니다.
 
-- GraphQL endpoint 구현
-- Apollo Client 연결
-- OpenWeather 실제 호출
-- 5일 예보 데이터 가공
-- Jest 테스트
+반영 사항:
 
-위 항목들은 이후 커밋에서 별도 검증 단위로 구현한다.
+- `pages/api/graphql.js`를 GraphQL endpoint로 사용
+- `typeDefs`와 `resolvers`를 `src/server/graphql` 아래로 분리
+- 현재는 endpoint 동작 확인을 위한 `health`, `version` query만 제공
+
+### 3. API key 관리
+
+OpenWeather API key는 브라우저 번들에 노출되면 안 됩니다. 따라서 클라이언트가 OpenWeather를 직접 호출하지 않고, Next.js API Route의 GraphQL resolver를 통해 서버에서 호출하는 구조로 설계합니다.
+
+반영 사항:
+
+- 실제 key는 `.env.local`에 저장
+- repository에는 `.env.example`만 포함
+- OpenWeather 연동은 server layer에서 처리 예정
+
+### 4. OpenWeather response 정규화
+
+OpenWeather 응답 필드는 외부 API 구조에 종속되어 있습니다. UI 컴포넌트가 `main.temp`, `weather[0].description`, `list[].dt_txt` 같은 raw field를 직접 알게 되면 변경 영향 범위가 커집니다.
+
+반영 예정:
+
+- `weatherMapper`에서 raw response를 내부 `WeatherReport` 모델로 변환
+- 3시간 단위 forecast list를 5일 예보 카드로 그룹핑
+- mapper 로직은 Jest 단위 테스트로 검증
+
+### 5. npm audit 경고
+
+`next@12.3.7` 사용으로 인해 `npm audit`에서 Next.js 및 transitive dependency 관련 경고가 발생합니다. `npm audit fix --force`를 실행하면 Next.js가 최신 major version으로 올라가 과제의 Next.js 12 요구사항을 위반하므로 적용하지 않았습니다.
+
+실제 운영 서비스라면 프레임워크 업그레이드 또는 보안 패치 버전을 검토해야 합니다.

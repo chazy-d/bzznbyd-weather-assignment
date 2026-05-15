@@ -2,16 +2,30 @@
 
 버즈앤비 FE 개발자 구현과제 제출용 repository입니다.
 
-## Stack
+Next.js 12 환경에서 도시별 날씨 정보를 조회하는 페이지를 구현합니다.
+
+## Tech Stack
 
 - Next.js 12
 - React 18
+- GraphQL API Route
+- Apollo Server
 - CSS Module
-- GraphQL, Apollo, OpenWeather API는 이후 커밋에서 연결 예정
+- OpenWeather API
+
+## Requirements
+
+- `localhost:3000` 접속 시 메인 페이지 표시
+- `/Seoul`, `/Tokyo`, `/Paris`, `/London` 상세 페이지 제공
+- Next.js로 frontend와 backend 구현
+- Backend는 GraphQL 사용
+- CSS Module 사용
+- 반응형 레이아웃 구현
+- OpenWeather API key는 서버 환경 변수로 관리
 
 ## Getting Started
 
-권장 Node.js 버전은 18 이상 20 이하입니다. Next.js 12는 최신 Node.js 26 환경에서 production build가 실패할 수 있어 `.nvmrc`를 함께 제공합니다.
+권장 Node.js 버전은 20입니다.
 
 ```bash
 nvm use
@@ -40,18 +54,21 @@ OPENWEATHER_API_KEY=your_openweather_api_key_here
 - `/Paris`
 - `/London`
 
-## Current Progress
+## GraphQL Endpoint
 
-현재 커밋은 프로젝트 부트스트랩 단계입니다.
+GraphQL endpoint는 아래 경로에서 제공합니다.
 
-- Create Next App으로 기본 골격 생성
-- Next.js 12 버전 고정
-- 도시 선택 메인 페이지 생성
-- 도시별 동적 라우팅 생성
-- `.env.example` 추가
-- 리서치 로그 초안 작성
+```text
+POST /api/graphql
+```
 
-GraphQL endpoint, Apollo Client, OpenWeather 연동, 5일 예보 가공, 테스트는 다음 커밋에서 단계적으로 구현합니다.
+현재 endpoint 상태 확인용 query:
+
+```bash
+curl -X POST http://localhost:3000/api/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query":"{ health { ok service version } version }"}'
+```
 
 ## Scripts
 
@@ -61,4 +78,7 @@ npm run lint
 npm run build
 ```
 
-현재 로컬 검증은 Node.js 20.20.2 기준으로 진행했습니다.
+## Notes
+
+- Next.js 12와 Apollo Server 5의 호환성을 고려해 Node.js 20 기준으로 검증했습니다.
+- 구현 과정에서 확인한 기술 조사와 설계 판단은 [RESEARCH_LOG.md](./RESEARCH_LOG.md)에 정리합니다.
