@@ -6,6 +6,7 @@ import { typeDefs } from '../../src/server/graphql/typeDefs'
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  includeStacktraceInErrorResponses: false,
 })
 
 export default startServerAndCreateNextHandler(server)
