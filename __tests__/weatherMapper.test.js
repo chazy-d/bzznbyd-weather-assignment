@@ -95,6 +95,44 @@ describe('weatherMapper', () => {
           description: 'light rain',
           icon: '10d',
         },
+        items: [
+          {
+            measuredAt: '2026-05-16T00:00:00.000Z',
+            temperature: 16.3,
+            feelsLike: 16.3,
+            humidity: 0,
+            windSpeed: 0,
+            condition: {
+              main: 'Clouds',
+              description: 'few clouds',
+              icon: '02n',
+            },
+          },
+          {
+            measuredAt: '2026-05-16T12:00:00.000Z',
+            temperature: 22.8,
+            feelsLike: 22.8,
+            humidity: 0,
+            windSpeed: 0,
+            condition: {
+              main: 'Rain',
+              description: 'light rain',
+              icon: '10d',
+            },
+          },
+          {
+            measuredAt: '2026-05-16T21:00:00.000Z',
+            temperature: 18.1,
+            feelsLike: 18.1,
+            humidity: 0,
+            windSpeed: 0,
+            condition: {
+              main: 'Clear',
+              description: 'clear sky',
+              icon: '01n',
+            },
+          },
+        ],
       },
       {
         date: '2026-05-17',
@@ -105,6 +143,32 @@ describe('weatherMapper', () => {
           description: 'clear sky',
           icon: '01d',
         },
+        items: [
+          {
+            measuredAt: '2026-05-17T00:00:00.000Z',
+            temperature: 15.5,
+            feelsLike: 15.5,
+            humidity: 0,
+            windSpeed: 0,
+            condition: {
+              main: 'Clouds',
+              description: 'broken clouds',
+              icon: '04n',
+            },
+          },
+          {
+            measuredAt: '2026-05-17T12:00:00.000Z',
+            temperature: 23.9,
+            feelsLike: 23.9,
+            humidity: 0,
+            windSpeed: 0,
+            condition: {
+              main: 'Clear',
+              description: 'clear sky',
+              icon: '01d',
+            },
+          },
+        ],
       },
     ])
     expect(report.meta).toEqual({

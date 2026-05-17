@@ -7,6 +7,19 @@ const timeFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 })
 
+const hourFormatter = new Intl.DateTimeFormat('en-US', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true,
+  timeZone: 'UTC',
+})
+
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  timeZone: 'UTC',
+})
+
 export function formatTemperature(value) {
   return `${Math.round(value)}°C`
 }
@@ -19,6 +32,37 @@ export function formatForecastRange(forecast) {
 
 export function formatObservationTime(value) {
   return `Updated ${timeFormatter.format(new Date(value))} UTC`
+}
+
+export function formatWeatherDate(date) {
+  return dateFormatter.format(new Date(`${date}T00:00:00.000Z`))
+}
+
+export function formatForecastTime(value) {
+  return hourFormatter
+    .format(new Date(value))
+    .replace(' ', '')
+    .toLowerCase()
+}
+
+export function formatForecastSlotRange(forecastEntry) {
+  return `${formatTemperature(forecastEntry.temperature)} / ${formatTemperature(
+    forecastEntry.feelsLike
+  )}`
+}
+
+export function formatWeatherDetail(current) {
+  return `Feels like ${formatTemperature(current.feelsLike)} ${
+    current.condition.description
+  } · wind ${current.windSpeed.toFixed(1)}m/s · humidity ${current.humidity}%`
+}
+
+export function getOpenWeatherIconUrl(icon) {
+  if (!icon) {
+    return ''
+  }
+
+  return `https://openweathermap.org/img/wn/${icon}@2x.png`
 }
 
 export function getWeatherStatus({ loading, error, data }) {

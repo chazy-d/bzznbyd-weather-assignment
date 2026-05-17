@@ -21,16 +21,28 @@ export const WEATHER_QUERY = gql`
         }
         measuredAt
       }
-      forecast {
-        date
-        minTemperature
-        maxTemperature
-        condition {
-          main
-          description
-          icon
+        forecast {
+          date
+          minTemperature
+          maxTemperature
+          condition {
+            main
+            description
+            icon
+          }
+          items {
+            measuredAt
+            temperature
+            feelsLike
+            humidity
+            windSpeed
+            condition {
+              main
+              description
+              icon
+            }
+          }
         }
-      }
       meta {
         source
         updatedAt

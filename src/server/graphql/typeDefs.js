@@ -36,11 +36,21 @@ export const typeDefs = `#graphql
     measuredAt: String!
   }
 
+  type ForecastEntry {
+    measuredAt: String!
+    temperature: Float!
+    feelsLike: Float!
+    humidity: Int!
+    windSpeed: Float!
+    condition: WeatherCondition!
+  }
+
   type DailyForecast {
     date: String!
     minTemperature: Float!
     maxTemperature: Float!
     condition: WeatherCondition!
+    items: [ForecastEntry!]!
   }
 
   type WeatherMeta {

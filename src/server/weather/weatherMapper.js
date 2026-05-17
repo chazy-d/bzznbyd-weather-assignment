@@ -24,6 +24,27 @@ function getMaxTemperature(forecastItem) {
   return forecastItem.main?.temp_max ?? forecastItem.main?.temp
 }
 
+function getForecastMeasuredAt(forecastItem) {
+  if (forecastItem.dt) {
+    return new Date(forecastItem.dt * 1000).toISOString()
+  }
+
+  return new Date(`${forecastItem.dt_txt.replace(' ', 'T')}.000Z`).toISOString()
+}
+
+function mapForecastEntry(forecastItem) {
+  const temperature = forecastItem.main?.temp ?? getMaxTemperature(forecastItem)
+
+  return {
+    measuredAt: getForecastMeasuredAt(forecastItem),
+    temperature,
+    feelsLike: forecastItem.main?.feels_like ?? temperature,
+    humidity: forecastItem.main?.humidity ?? 0,
+    windSpeed: forecastItem.wind?.speed ?? 0,
+    condition: mapCondition(forecastItem),
+  }
+}
+
 export function selectRepresentativeForecast(forecastItems) {
   if (!forecastItems.length) {
     return null
@@ -60,6 +81,7 @@ function mapDailyForecast(date, forecastItems) {
     minTemperature,
     maxTemperature,
     condition: representative.condition,
+    items: forecastItems.map(mapForecastEntry),
   }
 }
 
