@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import Link from 'next/link'
 import { CITY_ROUTES } from '../src/shared/cityRoutes'
+import { CitySelector } from '../src/features/weather/components/CitySelector'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
@@ -22,18 +22,12 @@ export default function Home() {
             Weather Dashboard
           </h1>
           <p className={styles.description}>
-            Select a city to open the weather detail route. GraphQL, Apollo,
-            and OpenWeather integration will be added in the next commits.
+            Select a city to view current weather and a 5-day forecast powered
+            by the local GraphQL API and OpenWeather.
           </p>
         </section>
 
-        <nav className={styles.cityNav} aria-label="City weather pages">
-          {CITY_ROUTES.map((city) => (
-            <Link key={city.code} href={`/${city.path}`}>
-              <a className={styles.cityLink}>{city.name}</a>
-            </Link>
-          ))}
-        </nav>
+        <CitySelector cities={CITY_ROUTES} />
       </main>
     </div>
   )
