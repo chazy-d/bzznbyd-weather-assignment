@@ -1,41 +1,42 @@
+import Image from 'next/image'
 import {
   formatObservationTime,
+  formatWeatherDetail,
   formatTemperature,
+  getOpenWeatherIconUrl,
 } from '../viewModel'
 import styles from '../../../../styles/Weather.module.css'
 
 export function CurrentWeatherCard({ report }) {
   const { current, meta } = report
+  const iconUrl = getOpenWeatherIconUrl(current.condition.icon)
 
   return (
     <section className={styles.currentCard} aria-labelledby="current-weather-title">
-      <div className={styles.cardHeader}>
-        <p className={styles.eyebrow}>Current</p>
-        <p className={styles.sourceBadge}>{meta.source}</p>
+      <div className={styles.weatherIconBadge} aria-hidden="true">
+        {iconUrl && (
+          <Image
+            src={iconUrl}
+            alt=""
+            width={72}
+            height={72}
+            unoptimized
+          />
+        )}
       </div>
 
-      <h2 id="current-weather-title" className={styles.temperature}>
-        {formatTemperature(current.temperature)}
-      </h2>
+      <div className={styles.currentMeta}>
+        <p className={styles.observedAt}>{formatObservationTime(current.measuredAt)}</p>
+        <h2 id="current-weather-title">
+          {report.city.name}, {report.city.country}
+        </h2>
+        <p className={styles.sourceBadge}>Source: {meta.source}</p>
+      </div>
 
-      <p className={styles.conditionText}>{current.condition.description}</p>
-
-      <dl className={styles.metricGrid}>
-        <div>
-          <dt>Feels like</dt>
-          <dd>{formatTemperature(current.feelsLike)}</dd>
-        </div>
-        <div>
-          <dt>Humidity</dt>
-          <dd>{current.humidity}%</dd>
-        </div>
-        <div>
-          <dt>Wind</dt>
-          <dd>{current.windSpeed.toFixed(1)} m/s</dd>
-        </div>
-      </dl>
-
-      <p className={styles.updatedAt}>{formatObservationTime(current.measuredAt)}</p>
+      <div className={styles.currentMeasure}>
+        <p className={styles.temperature}>{formatTemperature(current.temperature)}</p>
+        <p className={styles.conditionText}>{formatWeatherDetail(current)}</p>
+      </div>
     </section>
   )
 }

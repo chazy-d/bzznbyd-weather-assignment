@@ -1,72 +1,79 @@
 .page {
   min-height: 100vh;
-  background: #f4f7fb;
-  color: #1f2937;
+  background: #faf7f5;
+  color: #3d3d3d;
 }
 
 .shell {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1200px;
   min-height: 100vh;
   margin: 0 auto;
-  padding: 72px 32px;
+  padding: 88px 32px 56px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 32px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 60px;
 }
 
 .hero {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-.eyebrow {
-  margin: 0;
-  color: #2563eb;
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
 }
 
 .title {
   margin: 0;
-  color: #111827;
-  font-size: 3rem;
-  font-weight: 800;
+  color: #3d3d3d;
+  font-size: clamp(3.4rem, 6.4vw, 5.125rem);
+  font-weight: 900;
   line-height: 1.1;
 }
 
+.title span,
+.title strong {
+  display: block;
+}
+
+.title strong {
+  color: #ff0045;
+}
+
 .description {
-  max-width: 680px;
+  max-width: 520px;
   margin: 0;
-  color: #4b5563;
-  font-size: 1.125rem;
-  line-height: 1.7;
+  color: #8b8b8b;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .cityNav {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  width: min(100%, 596px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 
 .cityLink,
 .backLink {
-  border: 1px solid #d6deeb;
-  border-radius: 8px;
+  min-width: 140px;
+  border: 1px solid #ff0045;
+  border-radius: 6px;
   background: #ffffff;
-  color: #1f2937;
-  font-weight: 700;
+  color: #ff0045;
+  font-weight: 400;
   text-align: center;
-  box-shadow: 0 10px 24px rgba(31, 41, 55, 0.08);
-  transition: border-color 160ms ease, color 160ms ease, transform 160ms ease;
+  transition: background-color 160ms ease, border-color 160ms ease,
+    transform 160ms ease;
 }
 
 .cityLink {
-  padding: 24px 16px;
+  padding: 8px 18px;
+  line-height: 1.5;
 }
 
 .backLink {
@@ -78,23 +85,27 @@
 .cityLink:focus,
 .backLink:hover,
 .backLink:focus {
-  border-color: #2563eb;
-  color: #2563eb;
+  border-color: #b70055;
+  background: #ffd2cc;
   transform: translateY(-2px);
 }
 
-@media (max-width: 1279px) {
-  .shell {
-    max-width: none;
-    width: 100%;
-  }
+.cityLink:active {
+  background: #ffaba1;
+  border-color: #ff0045;
+  transform: translateY(0);
+}
+
+.earthWrap {
+  width: min(430px, 78vw);
+  line-height: 0;
 }
 
 @media (max-width: 900px) {
-  .cityNav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .shell {
+    padding-top: 72px;
+    gap: 48px;
   }
-
 }
 
 @media (max-width: 799px) {
@@ -106,9 +117,4 @@
   .shell {
     width: 800px;
   }
-
-  .cityNav {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
 }
