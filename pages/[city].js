@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client/react'
+import dynamic from 'next/dynamic'
 import { CITY_ROUTES, getCityByPath } from '../src/shared/cityRoutes'
 import { CurrentWeatherCard } from '../src/features/weather/components/CurrentWeatherCard'
-import { ForecastList } from '../src/features/weather/components/ForecastList'
 import { WeatherLayout } from '../src/features/weather/components/WeatherLayout'
 import { WeatherStatus } from '../src/features/weather/components/WeatherStatus'
 import {
@@ -10,6 +10,25 @@ import {
 } from '../src/features/weather/graphql/queries'
 import { getWeatherStatus } from '../src/features/weather/viewModel'
 import styles from '../styles/Weather.module.css'
+
+function ForecastLoading() {
+  return (
+    <section className={styles.forecastSection} aria-labelledby="forecast-title">
+      <h2 id="forecast-title">5-day Forecast</h2>
+      <p className={styles.forecastLoading}>Loading forecast panel...</p>
+    </section>
+  )
+}
+
+const ForecastList = dynamic(
+  () =>
+    import('../src/features/weather/components/ForecastList').then(
+      (mod) => mod.ForecastList
+    ),
+  {
+    loading: ForecastLoading,
+  }
+)
 
 export default function CityWeatherPage({ city }) {
   const { data, error, loading } = useQuery(WEATHER_QUERY, {

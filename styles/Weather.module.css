@@ -160,6 +160,15 @@
   list-style: none;
 }
 
+.forecastLoading {
+  margin: 0;
+  padding: 32px 30px;
+  color: #8b8b8b;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
 .forecastItem {
   border-bottom: 1px solid #dfdfdf;
   background: #ffffff;
